@@ -1,6 +1,6 @@
 import { Box, Chip, Divider } from "@mui/material";
 import List from "@mui/material/List";
-import { useLineup } from "../lineup";
+import { useLineup } from "../_Lineup";
 import { ArtistListItem } from "./ArtistListItem";
 
 export const ArtistList = () => {

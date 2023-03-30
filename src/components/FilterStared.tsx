@@ -1,7 +1,7 @@
 import StarIcon from "@mui/icons-material/Star";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useStarColor } from "../hooks/useStarColor";
-import { useLineup } from "../lineup";
+import { useLineup } from "../_Lineup";
 
 export const FilterStared = () => {
   const { filterStar, setFilterStar } = useLineup();

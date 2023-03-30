@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import { Lineup } from "../api";
 import { useStarColor } from "../hooks/useStarColor";
-import { useLineup } from "../lineup";
 import { formatTime } from "../utils";
+import { useLineup } from "../_Lineup";
 
 type ArtistListItemParams = {
   lineup: Lineup;
