@@ -5,12 +5,14 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { useState } from "react";
+import { useLineup } from "../lineup";
+import { SortOption as SortOptionType } from "../lineup/useLineup";
 
-const sortOptions = ["Time", "Venue", "Artist"];
+const sortOptions: SortOptionType[] = ["Time", "Venue", "Artist"];
 
 export const SortOption = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selected, setSelected] = useState("Time");
+  const { sortOrder, sortLineup, search } = useLineup();
 
   const open = Boolean(anchorEl);
 
@@ -18,9 +20,9 @@ export const SortOption = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (sortBy: string | undefined) => {
+  const handleClose = (sortBy: SortOptionType | undefined) => {
     if (sortBy) {
-      setSelected(sortBy);
+      sortLineup(sortBy);
     }
     setAnchorEl(null);
   };
@@ -43,7 +45,7 @@ export const SortOption = () => {
           justifyContent="space-between"
         >
           <div>Sort By:</div>
-          <Box sx={{ pl: 1, fontWeight: "bold" }}>{selected}</Box>
+          <Box sx={{ pl: 1, fontWeight: "bold" }}>{sortOrder}</Box>
         </Stack>
       </Button>
       <Menu
@@ -62,6 +64,7 @@ export const SortOption = () => {
         {sortOptions.map((o) => {
           return (
             <MenuItem
+              key={o}
               onClick={() => {
                 handleClose(o);
               }}

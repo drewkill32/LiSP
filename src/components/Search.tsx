@@ -3,10 +3,10 @@ import { Button } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import { useLineup } from "../Lineup";
+import { useLineup } from "../lineup";
 
 export const Search = () => {
-  const { artists } = useLineup();
+  const { artists, search, setSearch } = useLineup();
 
   const handleOnSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -18,7 +18,12 @@ export const Search = () => {
         disablePortal
         id="search-artists"
         options={artists}
+        value={search}
         fullWidth
+        onChange={(_e, newValue) => {
+          setSearch(newValue);
+        }}
+        freeSolo
         autoSelect
         renderInput={(params) => (
           <TextField {...params} label="Search Artists" />

@@ -1,23 +1,25 @@
 import StarIcon from "@mui/icons-material/Star";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useState } from "react";
 import { useStarColor } from "../hooks/useStarColor";
+import { useLineup } from "../lineup";
 
 export const FilterStared = () => {
-  const [star, setStar] = useState<"star" | "all">("all");
+  const { filterStar, setFilterStar } = useLineup();
   const color = useStarColor();
 
   return (
     <ToggleButtonGroup
-      value={star}
+      value={filterStar ? "star" : "all"}
       exclusive
       onChange={(_e, x) => {
-        setStar(x);
+        if (x) {
+          setFilterStar(x === "star");
+        }
       }}
       aria-label="text alignment"
     >
       <ToggleButton value="star">
-        <StarIcon sx={{ color: star === "star" ? color : "inherit" }} />
+        <StarIcon sx={{ color: filterStar ? color : "inherit" }} />
       </ToggleButton>
       <ToggleButton value="all">All</ToggleButton>
     </ToggleButtonGroup>

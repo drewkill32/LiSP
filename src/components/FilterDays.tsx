@@ -1,17 +1,19 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useState } from "react";
-import { Day } from "../utils";
+import { useLineup } from "../lineup";
 
 export const FilterDays = () => {
-  const [day, setDay] = useState<Day>("Fri");
+  const { day, setDay, search } = useLineup();
   return (
     <ToggleButtonGroup
       sx={{ maxWidth: "400px", margin: "auto" }}
       fullWidth
       value={day}
       exclusive
+      disabled={Boolean(search)}
       onChange={(_e, x) => {
-        setDay(x);
+        if (x) {
+          setDay(x);
+        }
       }}
       aria-label="text alignment"
     >
