@@ -20,6 +20,9 @@ export const parseDateTime = (dateStr: Day, timeStr: string) => {
   if (isPM && hours < 12) {
     hours += 12;
   }
+  if (!isPM && hours == 12) {
+    hours = 0;
+  }
 
   if (hours < dayEndHour) {
     date.setDate(date.getDate() + 1);
