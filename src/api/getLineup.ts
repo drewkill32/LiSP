@@ -2,7 +2,7 @@ import { z } from "zod";
 import { parseDateTime } from "../utils";
 import { getData, Mapper } from "./apiUtils";
 
-const daySchema = z.enum(["Fri", "Sat", "Sun"]);
+const daySchema = z.enum(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
 
 const lineupSchema = z.object({
   id: z.number(),
@@ -13,8 +13,11 @@ const lineupSchema = z.object({
   venue: z.string(),
   details: z.string().optional(),
   artistBioUrl: z.string().url(),
+  artistType: z.string(),
   venueAddress: z.string(),
 });
+
+export type Day = z.infer<typeof daySchema>;
 
 export type Lineup = z.infer<typeof lineupSchema>;
 
@@ -29,7 +32,8 @@ const lineupMapper: Mapper<Lineup> = (row) => {
     venue: row[5],
     details: row[6],
     artistBioUrl: row[7],
-    venueAddress: row[8],
+    artistType: row[8],
+    venueAddress: row[9],
   });
 };
 

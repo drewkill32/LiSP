@@ -4,13 +4,14 @@ import { useStarColor } from "../hooks/useStarColor";
 import { useLineup } from "../lineup";
 
 export const FilterStared = () => {
-  const { filterStar, setFilterStar } = useLineup();
+  const { filterStar, setFilterStar, search } = useLineup();
   const color = useStarColor();
 
   return (
     <ToggleButtonGroup
       value={filterStar ? "star" : "all"}
       exclusive
+      disabled={Boolean(search)}
       onChange={(_e, x) => {
         if (x) {
           setFilterStar(x === "star");

@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useMemo, useState } from "react";
-import { getLineup, Lineup } from "../api";
+import { Day, getLineup, Lineup } from "../api";
 import { useLocalStorageState } from "../hooks/useLocalStorage";
-import { Day } from "../utils";
 
 export const LineupContext = createContext<LineupData>({} as LineupData);
 
@@ -38,8 +37,10 @@ const groupByName = (array: Lineup[]): LineupGroup => {
   const grouped: LineupGroup = {};
 
   array.forEach((item) => {
-    const name = item.name[0].toUpperCase();
-
+    let name = item.name[0].toUpperCase();
+    if (!isNaN(Number(name))) {
+      name = "#";
+    }
     if (!grouped[name]) {
       grouped[name] = [];
     }
@@ -112,10 +113,37 @@ export const useLineupData = () => {
   const { data, error, isLoading } = useQuery<Lineup[], Error>({
     queryKey: ["lineup"],
     queryFn: getLineup,
+    staleTime: 1000 * 60,
+    placeholderData: () => {
+      var cachedValue = localStorage.getItem("lineups");
+      if (cachedValue) {
+        var l = JSON.parse(cachedValue) as Lineup[];
+        return l.map((x) => ({
+          ...x,
+          startTime: new Date(x.startTime),
+          endTime: new Date(x.endTime),
+        }));
+      }
+      return [];
+    },
+    onSuccess: (result) => {
+      if (result) {
+        localStorage.setItem("lineups", JSON.stringify(result));
+      }
+    },
   });
 
   const [search, setSearch] = useState("");
-  const [day, setDay] = useLocalStorageState<Day | null>("selectedDay", "Fri");
+  const [prevFilters, setPrevFilters] = useState<{
+    key: string;
+    sort: SortOption;
+    day: Day;
+    filterStar: boolean;
+  }>();
+  const [day, setDay] = useLocalStorageState<Day | undefined>(
+    "selectedDay",
+    "Fri"
+  );
   const [stared, setStared] = useLocalStorageState<Set<number>>(
     "stared",
     new Set<number>(),
@@ -159,18 +187,35 @@ export const useLineupData = () => {
 
   const filteredData = useMemo(() => {
     if (!data) {
-      return { "No Results": [] as Lineup[] };
+      return {};
     }
 
     if (search.length > 0) {
-      console.log(search);
-      const results = data.filter((d) =>
-        d.name.toUpperCase().includes(search.toUpperCase())
-      );
-      //.sort(sortByStartDate);
-      console.log(results);
-      setDay(null);
+      if (prevFilters?.key !== search) {
+        setPrevFilters({
+          key: search,
+          day: day || "Fri",
+          filterStar: filterStar,
+          sort: sortOrder,
+        });
+      }
+
+      const results = data
+        .filter((d) => d.name.toUpperCase().includes(search.toUpperCase()))
+        .sort(sortByStartDate);
+      setDay(undefined);
+      setFilterStar(false);
+      setSortOrder("Time");
       return groupByDay(results);
+    }
+    if (prevFilters !== undefined) {
+      const prevFiltersTemp = {
+        ...prevFilters,
+      };
+      setDay(prevFiltersTemp.day);
+      setSortOrder(prevFiltersTemp.sort);
+      setFilterStar(prevFiltersTemp.filterStar);
+      setPrevFilters(undefined);
     }
 
     const filtered = data.filter(

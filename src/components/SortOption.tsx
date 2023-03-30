@@ -34,6 +34,7 @@ export const SortOption = () => {
         aria-expanded={open ? "true" : undefined}
         variant="contained"
         disableElevation
+        disabled={Boolean(search)}
         onClick={handleClick}
         sx={{ width: "180px", minWidth: "180px", paddingBlock: "11px" }}
         endIcon={<KeyboardArrowDownIcon />}

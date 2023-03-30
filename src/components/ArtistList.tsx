@@ -1,10 +1,96 @@
-import { Box, Chip, Divider } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import { Box, Chip, Divider, Paper, Skeleton, Stack } from "@mui/material";
 import List from "@mui/material/List";
+import { useStarColor } from "../hooks/useStarColor";
 import { useLineup } from "../lineup";
 import { ArtistListItem } from "./ArtistListItem";
 
+const skeletons = [0, 1, 2, 3, 4, 5, 6];
+
 export const ArtistList = () => {
-  const { lineup } = useLineup();
+  const { lineup, isLoading, filterStar, day } = useLineup();
+  const color = useStarColor();
+  if (isLoading) {
+    return (
+      <Box sx={{ width: "100%" }}>
+        <Box
+          sx={{
+            position: "sticky",
+            top: "125px",
+            paddingBlock: 2,
+            zIndex: 888,
+            backgroundColor: "background.default",
+            width: "100%",
+          }}
+        >
+          <Divider variant="middle">
+            <Chip label={"Loading"} />
+          </Divider>
+          {skeletons.map((x) => (
+            <Box key={x} sx={{ padding: 1, marginTop: 2, marginInline: 3 }}>
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Skeleton variant="circular" height={40} width={40} />
+                <Stack sx={{ width: "100%" }}>
+                  <Skeleton />
+                  <Skeleton />
+                </Stack>
+              </Stack>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    );
+  }
+
+  if (Object.entries(lineup).length === 0) {
+    if (filterStar) {
+      return (
+        <Paper sx={{ paddingBlock: 10, paddingInline: 2 }} elevation={3}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div>
+              <p>
+                You have not{" "}
+                <Box
+                  component="span"
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <StarIcon sx={{ color: color }} />
+                </Box>{" "}
+                any shows for {day}
+              </p>
+              <p>
+                Select ALL above and favorite some shows that you want to see!
+              </p>
+            </div>
+          </Box>
+        </Paper>
+      );
+    }
+    return (
+      <Paper sx={{ paddingBlock: 10, paddingInline: 2 }} elevation={3}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div>
+            <p>Sorry there are no shows for {day}</p>
+          </div>
+        </Box>
+      </Paper>
+    );
+  }
 
   return (
     <List sx={{ width: "100%" }}>

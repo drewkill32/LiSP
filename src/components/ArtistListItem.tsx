@@ -2,6 +2,7 @@ import HeadphonesIcon from "@mui/icons-material/Headphones";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 import {
   Box,
   Checkbox,
@@ -46,7 +47,11 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
             rel="noopener"
             aria-label="artist bio"
           >
-            <HeadphonesIcon />
+            {lineup.artistType === "Music" ? (
+              <HeadphonesIcon />
+            ) : (
+              <TheaterComedyIcon />
+            )}
           </IconButton>
           <IconButton
             component="a"
@@ -79,22 +84,29 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
           />
         </ListItemIcon>
         <ListItemText
-          sx={{ maxWidth: "165px" }}
+          sx={{
+            marginRight: { xs: "3.4rem" },
+          }}
           id={labelId}
           primary={lineup.name}
           secondaryTypographyProps={{ component: "div" }}
           secondary={
-            <Stack direction="row" flexWrap="wrap" alignItems="center">
-              <span>{lineup.venue}</span>
-              <Box
-                component="span"
-                sx={{ maxWidth: "165px", overflow: "hidden" }}
+            <>
+              {Boolean(lineup.details) && <div>{lineup.details}</div>}
+              <Stack
+                direction="row"
+                gap={1}
+                flexWrap="wrap"
+                alignItems="center"
               >
-                {`${formatTime(lineup.startTime)} -  ${formatTime(
-                  lineup.endTime
-                )}`}
-              </Box>
-            </Stack>
+                <span>{lineup.venue}</span>
+                <Box component="span">
+                  {`${formatTime(lineup.startTime)} -  ${formatTime(
+                    lineup.endTime
+                  )}`}
+                </Box>
+              </Stack>
+            </>
           }
         />
       </ListItemButton>

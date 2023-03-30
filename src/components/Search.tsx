@@ -1,5 +1,3 @@
-import SearchIcon from "@mui/icons-material/Search";
-import { Button } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -29,9 +27,6 @@ export const Search = () => {
           <TextField {...params} label="Search Artists" />
         )}
       />
-      <Button type="submit" variant="contained">
-        <SearchIcon />
-      </Button>
     </Stack>
   );
 };

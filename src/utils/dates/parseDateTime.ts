@@ -1,4 +1,4 @@
-export type Day = "Fri" | "Sat" | "Sun";
+import { Day } from "../../api";
 
 export const parseDateTime = (dateStr: Day, timeStr: string) => {
   // the hour to consider the start of the next day
@@ -34,16 +34,30 @@ export const parseDateTime = (dateStr: Day, timeStr: string) => {
 const getDate = (dateStr: Day) => {
   //TODO: Get date should be dynamic
   const date = new Date(import.meta.env.VITE_EVENT_START_DATE);
+  let offset = 0;
   switch (dateStr) {
-    case "Fri":
+    case "Mon":
       // do nothing
       break;
+    case "Tue":
+      offset = 1;
+      break;
+    case "Wed":
+      offset = 2;
+      break;
+    case "Thu":
+      offset = 3;
+      break;
+    case "Fri":
+      offset = 4;
+      break;
     case "Sat":
-      date.setDate(date.getDate() + 1);
+      offset = 5;
       break;
     case "Sun":
-      date.setDate(date.getDate() + 2);
+      offset = 6;
       break;
   }
+  date.setDate(date.getDate() + offset);
   return date;
 };
