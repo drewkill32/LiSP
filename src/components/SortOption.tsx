@@ -5,8 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import * as React from "react";
 import { useState } from "react";
-import { useLineup } from "../_Lineup";
-import { SortOption as SortOptionType } from "../_Lineup/useLineup";
+import { SortOption as SortOptionType, useLineup } from "../lineup";
 
 const sortOptions: SortOptionType[] = ["Time", "Venue", "Artist"];
 

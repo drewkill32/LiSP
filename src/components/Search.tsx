@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-import { useLineup } from "../_Lineup";
+import { useLineup } from "../lineup";
 
 export const Search = () => {
   const { artists, search, setSearch } = useLineup();

@@ -8,7 +8,7 @@ import { FilterDays } from "./components/FilterDays";
 import { FilterStared } from "./components/FilterStared";
 import { Search } from "./components/Search";
 import { SortOption } from "./components/SortOption";
-import { LineupProvider } from "./_Lineup";
+import { LineupProvider } from "./lineup";
 
 function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
