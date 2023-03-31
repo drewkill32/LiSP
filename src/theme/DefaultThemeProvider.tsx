@@ -16,7 +16,7 @@ export const DefaultThemeProvider = ({
     () =>
       createTheme({
         palette: {
-          mode: "dark",
+          mode: prefersDarkMode ? "dark" : "light",
         },
       }),
     [prefersDarkMode]
