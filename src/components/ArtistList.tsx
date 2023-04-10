@@ -1,45 +1,15 @@
 import StarIcon from "@mui/icons-material/Star";
-import { Box, Chip, Divider, Paper, Skeleton, Stack } from "@mui/material";
-import List from "@mui/material/List";
+import { Box, Chip, Divider, List, Paper } from "@mui/material";
 import { useStarColor } from "../hooks/useStarColor";
 import { useLineup } from "../lineup";
 import { ArtistListItem } from "./ArtistListItem";
-
-const skeletons = [0, 1, 2, 3, 4, 5, 6];
+import { ListSkeleton } from "./ListSkeleton";
 
 export const ArtistList = () => {
   const { lineup, isLoading, filterStar, day } = useLineup();
   const color = useStarColor();
   if (isLoading) {
-    return (
-      <Box sx={{ width: "100%" }}>
-        <Box
-          sx={{
-            position: "sticky",
-            top: "125px",
-            paddingBlock: 2,
-            zIndex: 888,
-            backgroundColor: "background.default",
-            width: "100%",
-          }}
-        >
-          <Divider variant="middle">
-            <Chip label={"Loading"} />
-          </Divider>
-          {skeletons.map((x) => (
-            <Box key={x} sx={{ padding: 1, marginTop: 2, marginInline: 3 }}>
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Skeleton variant="circular" height={40} width={40} />
-                <Stack sx={{ width: "100%" }}>
-                  <Skeleton />
-                  <Skeleton />
-                </Stack>
-              </Stack>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    );
+    return <ListSkeleton />;
   }
 
   if (Object.entries(lineup).length === 0) {

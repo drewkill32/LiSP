@@ -1,18 +1,30 @@
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
-import { Box, Fab, Zoom } from "@mui/material";
+import MapIcon from "@mui/icons-material/Map";
+import { Box, Button, Fab, Zoom } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import { ArtistList } from "./components/ArtistList";
-import { FilterDays } from "./components/FilterDays";
-import { FilterStared } from "./components/FilterStared";
-import { Search } from "./components/Search";
-import { SortOption } from "./components/SortOption";
-import { useLineup } from "./lineup";
+import { Link as RouterLink } from "react-router-dom";
+import { ArtistList } from "../components/ArtistList";
+import { FilterDays } from "../components/FilterDays";
+import { FilterStared } from "../components/FilterStared";
+import { Search } from "../components/Search";
+import { SortOption } from "../components/SortOption";
+import { useLineup } from "../lineup";
 
 function App() {
-  const { search, setSearch, isLoading } = useLineup();
+  const { search, setSearch } = useLineup();
   return (
     <Stack gap={2} sx={{ margin: { xs: 2, sm: 6 } }}>
       <Search />
+      <Button
+        sx={{ marginX: 4 }}
+        variant="contained"
+        size="large"
+        to="/map"
+        component={RouterLink}
+        endIcon={<MapIcon />}
+      >
+        View Map
+      </Button>
       <Stack
         gap={1}
         sx={{
@@ -25,6 +37,7 @@ function App() {
         }}
       >
         <FilterDays />
+
         <Stack
           direction="row"
           justifyContent="space-between"

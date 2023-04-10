@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { LineupProvider } from "./lineup";
+import { DefaultRouteProvider } from "./routes";
 import { DefaultThemeProvider } from "./theme/DefaultThemeProvider";
 
 const queryClient = new QueryClient({
@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <DefaultThemeProvider>
         <LineupProvider>
-          <App />
+          <DefaultRouteProvider />
         </LineupProvider>
       </DefaultThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />

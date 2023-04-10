@@ -1,3 +1,4 @@
+import slugify from "slugify";
 import { z } from "zod";
 import { parseDateTime } from "../utils";
 import { getData, Mapper } from "./apiUtils";
@@ -15,6 +16,9 @@ const lineupSchema = z.object({
   artistBioUrl: z.string().url(),
   artistType: z.string(),
   venueAddress: z.string(),
+  venueSlug: z.string(),
+  lat: z.number(),
+  lng: z.number(),
 });
 
 export type Day = z.infer<typeof daySchema>;
@@ -34,6 +38,12 @@ const lineupMapper: Mapper<Lineup> = (row) => {
     artistBioUrl: row[7],
     artistType: row[8],
     venueAddress: row[9],
+    venueSlug: slugify(row[5], {
+      remove: /[().*+]/g,
+      lower: true,
+    }),
+    lat: parseFloat(row[10]),
+    lng: parseFloat(row[11]),
   });
 };
 
