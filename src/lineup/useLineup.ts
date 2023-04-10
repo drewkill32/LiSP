@@ -113,7 +113,7 @@ const sortByStartDate = (a: sortByStartDateProps, b: sortByStartDateProps) => {
   return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
 };
 
-const useVenues = (data: Lineup[]) => {
+const useVenues = (data: Lineup[] | undefined) => {
   const venues = useMemo(() => {
     if (!data) {
       return [];
