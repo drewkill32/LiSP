@@ -105,9 +105,39 @@ const sortLineupData = (sortOrder: SortOption, data: Lineup[]) => {
   }
 };
 
-const sortByStartDate = (a: Lineup, b: Lineup) => {
+type sortByStartDateProps = {
+  startTime: Date;
+};
+
+const sortByStartDate = (a: sortByStartDateProps, b: sortByStartDateProps) => {
   return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
 };
+
+const useVenues = (data: Lineup[]) => {
+  const venues = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return Object.entries(groupByVenue(sortLineupData("Venue", data))).map(
+      ([key, lineups]) => {
+        const sortedData = sortLineupData("Time", lineups);
+        const grouped = groupByDay(sortedData);
+        return {
+          name: key,
+          venueSlug: lineups[0].venueSlug,
+          lat: lineups[0].lat,
+          lng: lineups[0].lng,
+          address: lineups[0].venueAddress,
+          lineups: grouped,
+        };
+      }
+    );
+  }, [data]);
+  return venues;
+};
+
+export type Venue = ReturnType<typeof useVenues>[number];
 
 export const useLineupData = () => {
   const { data, error, isLoading } = useQuery<Lineup[], Error>({
@@ -126,7 +156,7 @@ export const useLineupData = () => {
       }
       return [];
     },
-    onSuccess: (result) => {
+    onSuccess: (result: Lineup[]) => {
       if (result) {
         localStorage.setItem("lineups", JSON.stringify(result));
       }
@@ -140,10 +170,12 @@ export const useLineupData = () => {
     day: Day;
     filterStar: boolean;
   }>();
+
   const [day, setDay] = useLocalStorageState<Day | undefined>(
     "selectedDay",
     "Fri"
   );
+
   const [stared, setStared] = useLocalStorageState<Set<number>>(
     "stared",
     new Set<number>(),
@@ -152,6 +184,7 @@ export const useLineupData = () => {
     },
     (value) => new Set<number>(value)
   );
+
   const [filterStar, setFilterStar] = useLocalStorageState("filterStar", false);
   const [sortOrder, setSortOrder] = useLocalStorageState<SortOption>(
     "sortOrder",
@@ -161,9 +194,9 @@ export const useLineupData = () => {
   let artists: string[] = [];
   if (data) {
     const sortedArtists = data
-      ?.map((l) => l.name)
-      .sort((a, b) => a.localeCompare(b));
-    artists = [...new Set(sortedArtists)];
+      ?.map((l: Lineup) => l.name)
+      .sort((a: string, b: string) => a.localeCompare(b));
+    artists = [...new Set<string>(sortedArtists)];
   }
 
   const toggleStar = (id: number) => {
@@ -201,7 +234,9 @@ export const useLineupData = () => {
       }
 
       const results = data
-        .filter((d) => d.name.toUpperCase().includes(search.toUpperCase()))
+        .filter((d: Lineup) =>
+          d.name.toUpperCase().includes(search.toUpperCase())
+        )
         .sort(sortByStartDate);
       setDay(undefined);
       setFilterStar(false);
@@ -219,13 +254,15 @@ export const useLineupData = () => {
     }
 
     const filtered = data.filter(
-      (d) => d.day === day && (filterStar === false || stared.has(d.id))
+      (d: Lineup) => d.day === day && (filterStar === false || stared.has(d.id))
     );
 
     const sortedData = sortLineupData(sortOrder, filtered);
 
     return groupLineup(sortOrder, sortedData);
   }, [data, day, sortOrder, filterStar, stared, search]);
+
+  const venues = useVenues(data);
 
   return {
     isLoading,
@@ -245,6 +282,7 @@ export const useLineupData = () => {
     day,
     setDay,
     isStared,
+    venues,
   };
 };
 

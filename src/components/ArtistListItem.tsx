@@ -4,19 +4,18 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 import {
-  Box,
   Checkbox,
   IconButton,
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   Stack,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import { Lineup } from "../api";
 import { useStarColor } from "../hooks/useStarColor";
 import { useLineup } from "../lineup";
-import { formatTime } from "../utils";
+import { ArtistListItemText } from "./ArtistListItemText";
 
 type ArtistListItemParams = {
   lineup: Lineup;
@@ -25,10 +24,6 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
   const { toggleStar, isStared } = useLineup();
 
   const labelId = `${lineup.name}-${lineup.id}`;
-
-  const encodedAddress = encodeURIComponent(lineup.venueAddress);
-  const encodedLocationName = encodeURIComponent(lineup.venue);
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}+${encodedLocationName}`;
 
   const color = useStarColor();
 
@@ -54,9 +49,8 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
             )}
           </IconButton>
           <IconButton
-            component="a"
-            href={googleMapsUrl}
-            rel="noopener"
+            component={Link}
+            to={`/map/${lineup.venueSlug}`}
             aria-label="map"
           >
             <LocationOnIcon />
@@ -83,31 +77,12 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
             inputProps={{ "aria-labelledby": labelId }}
           />
         </ListItemIcon>
-        <ListItemText
+        <ArtistListItemText
           sx={{
             marginRight: { xs: "3.4rem" },
           }}
           id={labelId}
-          primary={lineup.name}
-          secondaryTypographyProps={{ component: "div" }}
-          secondary={
-            <>
-              {Boolean(lineup.details) && <div>{lineup.details}</div>}
-              <Stack
-                direction="row"
-                gap={1}
-                flexWrap="wrap"
-                alignItems="center"
-              >
-                <span>{lineup.venue}</span>
-                <Box component="span">
-                  {`${formatTime(lineup.startTime)} -  ${formatTime(
-                    lineup.endTime
-                  )}`}
-                </Box>
-              </Stack>
-            </>
-          }
+          lineup={lineup}
         />
       </ListItemButton>
     </ListItem>
