@@ -11,6 +11,7 @@ import {
   Divider,
   List,
   ListItem,
+  ListSubheader,
   Skeleton,
   Stack,
   ThemeProvider,
@@ -21,10 +22,10 @@ import {
   MarkerF as Marker,
   useLoadScript,
 } from "@react-google-maps/api";
-import React, { createRef, useEffect, useRef } from "react";
+import React, { createRef, useEffect, useMemo, useRef } from "react";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { ArtistListItemText } from "../components/ArtistListItemText";
-import { useLineup } from "../lineup";
+import { useLineup, Venue } from "../lineup";
 import { getGoogleMapsUrl } from "../utils";
 
 const containerStyle = {
@@ -39,17 +40,25 @@ const center = {
   lng: -82.66162601334305,
 };
 
-const divStyle = {
-  background: `white`,
-  border: `1px solid #ccc`,
-  padding: 15,
-};
-
 const innerTheme = createTheme({
   palette: {
     mode: "light",
   },
 });
+
+type SubVenueButtonTextProps = {
+  venueName: string;
+};
+
+const SubVenueButtonText = ({ venueName }: SubVenueButtonTextProps) => {
+  const regex = /\(([^)]+)\)/;
+  const match = venueName.match(regex);
+  if (match) {
+    const subHeading = match[1];
+    return <>{subHeading}</>;
+  }
+  return <>{venueName}</>;
+};
 
 export function Map() {
   const { mapId } = useParams();
@@ -98,10 +107,42 @@ export function Map() {
 
   const isLoading = venuesLoading || mapLoading;
 
+  const addressedVenues = useMemo(() => {
+    const a = venues.reduce(
+      (
+        acc: Record<string, { lat: number; lng: number; venues: Venue[] }>,
+        item
+      ) => {
+        const address = item.address;
+
+        if (!acc[address]) {
+          acc[address] = {
+            lat: item.lat,
+            lng: item.lng,
+            venues: [],
+          };
+        }
+
+        acc[address].venues.push(item);
+        return acc;
+      },
+      {}
+    );
+    Object.entries(a).forEach(([, v]) => {
+      v.venues = v.venues.sort((a, b) => a.name.localeCompare(b.name));
+    });
+    return a;
+  }, [venues]);
+
+  const selectedAddress =
+    selectedVenueIndex === -1
+      ? undefined
+      : addressedVenues[venues[selectedVenueIndex].address];
+
   return isLoading ? (
-    <Stack gap={2} sx={{ maxHeight: "100dvh" }}>
+    <Stack gap={2}>
       <Button
-        sx={{ marginX: 1, marginTop: { xs: 2, sm: 1 } }}
+        sx={{ marginInline: 1, marginTop: 2 }}
         variant="contained"
         size="large"
         to="/"
@@ -115,57 +156,100 @@ export function Map() {
           mapContainerStyle={{
             ...containerStyle,
             color: innerTheme.palette.text.primary,
+            flex: "0 1 auto",
           }}
           center={center}
           zoom={14.8}
         >
-          {venues.map((venue, index) => (
+          {Object.entries(addressedVenues).map(([address, venue]) => (
             <Marker
-              onClick={() => handleMarkerClick(index)}
-              key={venue.name}
+              onClick={() =>
+                handleMarkerClick(
+                  venues.findIndex((x) => x.name === venue.venues[0].name)
+                )
+              }
+              key={address}
               position={{ lat: venue.lat, lng: venue.lng }}
             ></Marker>
           ))}
-          {selectedVenueIndex > -1 && (
+          {selectedAddress && (
             <InfoWindow
               onCloseClick={() => navigate("/map")}
               options={{
                 pixelOffset: new google.maps.Size(0, -30),
               }}
               position={{
-                lat: venues[selectedVenueIndex].lat,
-                lng: venues[selectedVenueIndex].lng,
+                lat: selectedAddress.lat,
+                lng: selectedAddress.lng,
               }}
             >
-              <Stack gap={1}>
-                <Box sx={{ fontWeight: 700 }}>
-                  {venues[selectedVenueIndex].name}
-                </Box>
-                <Box sx={{ maxWidth: "65%" }}>
-                  {venues[selectedVenueIndex].address}
-                </Box>
-                <a
-                  target="_blank"
-                  tabIndex={0}
-                  href={getGoogleMapsUrl(
-                    venues[selectedVenueIndex].address,
-                    venues[selectedVenueIndex].name
-                  )}
-                >
-                  View on Google Maps
-                </a>
-              </Stack>
+              {selectedAddress.venues.length === 1 ? (
+                <Stack gap={1}>
+                  <Box sx={{ fontWeight: 700 }}>
+                    {venues[selectedVenueIndex].name}
+                  </Box>
+                  <Box sx={{ maxWidth: "65%" }}>
+                    {venues[selectedVenueIndex].address}
+                  </Box>
+                  <a
+                    target="_blank"
+                    tabIndex={0}
+                    href={getGoogleMapsUrl(
+                      venues[selectedVenueIndex].address,
+                      venues[selectedVenueIndex].name
+                    )}
+                  >
+                    View on Google Maps
+                  </a>
+                </Stack>
+              ) : (
+                <Stack gap={1}>
+                  <Box sx={{ fontWeight: 700 }}>
+                    {selectedAddress.venues[0].name.replace(
+                      / *\([^)]*\) */g,
+                      ""
+                    )}
+                  </Box>
+                  <Box sx={{ maxWidth: "65%" }}>
+                    {selectedAddress.venues[0].address}
+                  </Box>
+                  {selectedAddress.venues.map((v) => (
+                    <>
+                      <Button
+                        component={RouterLink}
+                        size="small"
+                        variant="outlined"
+                        to={v.venueSlug}
+                      >
+                        <SubVenueButtonText venueName={v.name} />
+                      </Button>
+                    </>
+                  ))}
+                  <a
+                    target="_blank"
+                    tabIndex={0}
+                    href={getGoogleMapsUrl(
+                      venues[selectedVenueIndex].address,
+                      venues[selectedVenueIndex].name
+                    )}
+                  >
+                    View on Google Maps
+                  </a>
+                </Stack>
+              )}
             </InfoWindow>
           )}
         </GoogleMap>
       </ThemeProvider>
+
       <Stack
         sx={{
-          overflowY: selectedVenueIndex === -1 ? "auto" : "hidden",
-          height: "40dvh",
+          height: "39dvh",
+          overflow: selectedVenueIndex === -1 ? "auto" : "hidden",
+          marginBottom: 1,
         }}
       >
-        <Box ref={parentRef} id="boundingRect">
+        <Box>
           {venues.map((venue, index) => {
             return (
               <Accordion
@@ -188,14 +272,32 @@ export function Map() {
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   {venue.name}
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails
+                  sx={{
+                    height: "32.6dvh",
+                    overflow: "auto",
+                    position: "relative",
+                  }}
+                  ref={parentRef}
+                >
                   {Object.entries(venue.lineups).map(([day, lineups]) => (
                     <List
+                      sx={{ zIndex: 998 }}
                       key={day}
                       subheader={
-                        <Divider variant="middle" sx={{ marginBlock: 1 }}>
-                          <Chip label={day} />
-                        </Divider>
+                        <ListSubheader
+                          sx={{
+                            marginBlock: 0,
+                            position: "sticky",
+                            top: -8,
+                            zIndex: 999,
+                            borderRadius: 4,
+                          }}
+                        >
+                          <Divider variant="middle">
+                            <Chip label={day} />
+                          </Divider>
+                        </ListSubheader>
                       }
                     >
                       {lineups.map((l) => (

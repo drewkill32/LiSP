@@ -101,7 +101,7 @@ const sortLineupData = (sortOrder: SortOption, data: Lineup[]) => {
     case "Artist":
       return data.sort((a, b) => a.name.localeCompare(b.name));
     case "Venue":
-      return data.sort((a, b) => a.venue.localeCompare(b.name));
+      return data.sort((a, b) => a.venue.localeCompare(b.venue));
   }
 };
 
