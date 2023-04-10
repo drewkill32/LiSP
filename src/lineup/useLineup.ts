@@ -101,7 +101,7 @@ const sortLineupData = (sortOrder: SortOption, data: Lineup[]) => {
     case "Artist":
       return data.sort((a, b) => a.name.localeCompare(b.name));
     case "Venue":
-      return data.sort((a, b) => a.venue.localeCompare(b.name));
+      return data.sort((a, b) => a.venue.localeCompare(b.venue));
   }
 };
 
@@ -113,7 +113,7 @@ const sortByStartDate = (a: sortByStartDateProps, b: sortByStartDateProps) => {
   return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
 };
 
-const useVenues = (data: Lineup[]) => {
+const useVenues = (data: Lineup[] | undefined) => {
   const venues = useMemo(() => {
     if (!data) {
       return [];
