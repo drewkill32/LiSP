@@ -20,7 +20,10 @@ type MainLayoutProps = {
 };
 
 const drawerWidth = 240;
-const navItems = [{ name: "Schedule", to: "/" }];
+const navItems = [
+  { name: "Schedule", to: "/" },
+  { name: "Map", to: "/map" },
+];
 
 export function MainLayout({ children }: MainLayoutProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);

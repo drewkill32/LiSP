@@ -1,9 +1,11 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import DirectionsIcon from "@mui/icons-material/Directions";
 import {
   Box,
   Divider,
   Drawer,
   IconButton,
+  ListItemIcon,
   Slide,
   SwipeableDrawer,
   Theme,
@@ -17,6 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { Venue } from "../../lineup";
+import { createGoogleMapsUrl } from "../../utils";
 import { ArtistListItemText } from "../ArtistListItemText";
 
 type MapDrawerProps = {
@@ -32,6 +35,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   width: 390,
+  maxWidth: 390,
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
 }));
@@ -73,7 +77,6 @@ const ResponsiveDrawer = ({
     setOpen(Boolean(enabled));
   }, [enabled]);
 
-  console.log({ title, open, enabled, isSmallScreen });
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -134,7 +137,7 @@ const ResponsiveDrawer = ({
         open={enabled}
         variant="persistent"
         anchor="left"
-        sx={{ width: 350 }}
+        sx={{ width: 390, maxWidth: 390 }}
       >
         <DrawerHeader>
           <IconButton
@@ -159,7 +162,7 @@ export const MapDrawer = ({ open, onClose, venue }: MapDrawerProps) => {
   return (
     <ResponsiveDrawer open={open} onClose={onClose} title={venue?.name || ""}>
       {venue && (
-        <List sx={{ mt: 2, mx: 1 }}>
+        <List sx={{ mt: 2, mx: 1, maxWidth: { sm: "100%", md: 360 } }}>
           <ListItem>
             <ListItemText
               primaryTypographyProps={{
@@ -171,11 +174,19 @@ export const MapDrawer = ({ open, onClose, venue }: MapDrawerProps) => {
             </ListItemText>
           </ListItem>
           <ListItem>
+            <ListItemIcon>
+              <IconButton
+                component="a"
+                href={createGoogleMapsUrl(venue.address, venue.name)}
+              >
+                <DirectionsIcon />
+              </IconButton>
+            </ListItemIcon>
             <ListItemText>{venue.address}</ListItemText>
           </ListItem>
           <Divider />
           {venue.stages.map((s) => (
-            <div>
+            <div key={s.name}>
               {venue.stages.length > 1 && (
                 <>
                   <ListItem
@@ -200,9 +211,8 @@ export const MapDrawer = ({ open, onClose, venue }: MapDrawerProps) => {
               )}
 
               {s.grpPerformance.map((x) => (
-                <div>
+                <div key={x.day}>
                   <ListItem
-                    key={x.day}
                     sx={{
                       position: "sticky",
                       top: venue.stages.length > 1 ? 40 : -2,
