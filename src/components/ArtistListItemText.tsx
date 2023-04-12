@@ -1,5 +1,4 @@
 import { Box, ListItemText, ListItemTextProps, Stack } from "@mui/material";
-import { Lineup } from "../api";
 import { formatTime } from "../utils";
 
 interface ArtistListItemTextProps
@@ -7,11 +6,19 @@ interface ArtistListItemTextProps
     ListItemTextProps,
     "primary" | "secondaryTypographyProps" | "secondary"
   > {
-  lineup: Lineup;
+  lineup: {
+    name: string;
+    details: string;
+    venue: string;
+    startTime: Date;
+    endTime: Date;
+  };
+  hideVenue?: boolean;
 }
 
 export const ArtistListItemText = ({
   lineup,
+  hideVenue = false,
   ...rest
 }: ArtistListItemTextProps) => {
   return (
@@ -23,7 +30,7 @@ export const ArtistListItemText = ({
         <>
           {Boolean(lineup.details) && <div>{lineup.details}</div>}
           <Stack direction="row" gap={1} flexWrap="wrap" alignItems="center">
-            <span>{lineup.venue}</span>
+            {!hideVenue && <span>{lineup.venue}</span>}
             <Box component="span">
               {`${formatTime(lineup.startTime)} -  ${formatTime(
                 lineup.endTime

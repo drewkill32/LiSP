@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useMemo, useState } from "react";
-import { Day, getLineup, Lineup } from "../api";
+import { Day, Lineup } from "../api";
 import { useLocalStorageState } from "../hooks/useLocalStorage";
+import { useLineupQuery } from "./useLineupQuery";
+import { useVenues } from "./useVenue";
 
 export const LineupContext = createContext<LineupData>({} as LineupData);
 
@@ -11,7 +12,7 @@ export const useLineup = (): LineupData => {
   return useContext(LineupContext)!;
 };
 
-type LineupGroup = Record<string, Lineup[]>;
+export type LineupGroup = Record<string, Lineup[]>;
 
 const groupByHour = (array: Lineup[]): LineupGroup => {
   const grouped: LineupGroup = {};
@@ -113,55 +114,8 @@ const sortByStartDate = (a: sortByStartDateProps, b: sortByStartDateProps) => {
   return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
 };
 
-const useVenues = (data: Lineup[] | undefined) => {
-  const venues = useMemo(() => {
-    if (!data) {
-      return [];
-    }
-
-    return Object.entries(groupByVenue(sortLineupData("Venue", data))).map(
-      ([key, lineups]) => {
-        const sortedData = sortLineupData("Time", lineups);
-        const grouped = groupByDay(sortedData);
-        return {
-          name: key,
-          venueSlug: lineups[0].venueSlug,
-          lat: lineups[0].lat,
-          lng: lineups[0].lng,
-          address: lineups[0].venueAddress,
-          lineups: grouped,
-        };
-      }
-    );
-  }, [data]);
-  return venues;
-};
-
-export type Venue = ReturnType<typeof useVenues>[number];
-
 export const useLineupData = () => {
-  const { data, error, isLoading } = useQuery<Lineup[], Error>({
-    queryKey: ["lineup"],
-    queryFn: getLineup,
-    staleTime: 1000 * 60,
-    placeholderData: () => {
-      var cachedValue = localStorage.getItem("lineups");
-      if (cachedValue) {
-        var l = JSON.parse(cachedValue) as Lineup[];
-        return l.map((x) => ({
-          ...x,
-          startTime: new Date(x.startTime),
-          endTime: new Date(x.endTime),
-        }));
-      }
-      return [];
-    },
-    onSuccess: (result: Lineup[]) => {
-      if (result) {
-        localStorage.setItem("lineups", JSON.stringify(result));
-      }
-    },
-  });
+  const { data, error, isLoading } = useLineupQuery();
 
   const [search, setSearch] = useState("");
   const [prevFilters, setPrevFilters] = useState<{

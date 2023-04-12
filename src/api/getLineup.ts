@@ -38,7 +38,7 @@ const lineupMapper: Mapper<Lineup> = (row) => {
     artistBioUrl: row[7],
     artistType: row[8],
     venueAddress: row[9],
-    venueSlug: slugify(row[5], {
+    venueSlug: slugify(row[5].replace(/ *\([^)]*\) */g, ""), {
       remove: /[().*+]/g,
       lower: true,
     }),
