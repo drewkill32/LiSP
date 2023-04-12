@@ -8,7 +8,7 @@ interface ArtistListItemTextProps
   > {
   lineup: {
     name: string;
-    details: string;
+    details?: string;
     venue: string;
     startTime: Date;
     endTime: Date;
