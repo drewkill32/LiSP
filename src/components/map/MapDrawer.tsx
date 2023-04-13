@@ -72,6 +72,7 @@ const ResponsiveDrawer = ({
   );
 
   const [open, setOpen] = useState(false);
+  const touchSupported = "ontouchstart" in window;
 
   useEffect(() => {
     setOpen(Boolean(enabled));
@@ -80,9 +81,29 @@ const ResponsiveDrawer = ({
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
+
   if (isSmallScreen) {
     return (
       <>
+        <Box
+          sx={{
+            position: "absolute",
+            height: drawerBleeding,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            zIndex: 9999,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            cursor: "pointer",
+            display: enabled && !open && !touchSupported ? "block" : "none",
+          }}
+          onClick={(e) => {
+            if (!touchSupported) {
+              setOpen((o) => !o);
+            }
+          }}
+        ></Box>
         <SwipeableDrawer
           anchor="bottom"
           open={open}
@@ -114,7 +135,9 @@ const ResponsiveDrawer = ({
               }}
             >
               <Puller />
-              <Typography sx={{ p: 2 }}>{title}</Typography>
+              <Typography sx={{ p: 3 }} variant="h3">
+                {title}
+              </Typography>
             </StyledBox>
           </Slide>
           <StyledBox
@@ -142,7 +165,6 @@ const ResponsiveDrawer = ({
         <DrawerHeader>
           <IconButton
             onClick={() => {
-              console.log("close");
               onClose?.();
             }}
           >

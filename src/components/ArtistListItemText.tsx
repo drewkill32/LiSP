@@ -1,4 +1,10 @@
-import { Box, ListItemText, ListItemTextProps, Stack } from "@mui/material";
+import {
+  Box,
+  ListItemText,
+  ListItemTextProps,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { formatTime } from "../utils";
 
 interface ArtistListItemTextProps
@@ -24,7 +30,7 @@ export const ArtistListItemText = ({
   return (
     <ListItemText
       {...rest}
-      primary={lineup.name}
+      primary={<Typography variant="h6">{lineup.name}</Typography>}
       secondaryTypographyProps={{ component: "div" }}
       secondary={
         <>

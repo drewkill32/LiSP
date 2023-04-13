@@ -1,7 +1,7 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
+import Box, { BoxProps } from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -14,6 +14,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { LiSPIcon } from "../components/LiSPIcon";
 
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -21,10 +22,32 @@ type MainLayoutProps = {
 
 const drawerWidth = 240;
 const navItems = [
-  { name: "Schedule", to: "/" },
-  { name: "Map", to: "/map" },
+  { name: "Schedule", to: "/", type: "internal" },
+  { name: "Map", to: "/map", type: "internal" },
 ];
 
+const TitleLink = ({ sx, ...rest }: BoxProps) => {
+  return (
+    <Box
+      component="a"
+      href="https://www.lostinstpete.org"
+      sx={{
+        my: 2,
+        display: "flex",
+        alignItems: "center",
+        color: "inherit",
+        textDecoration: "none",
+        justifyContent: { xs: "center", sm: "flex-start" },
+        gap: 1,
+        ...sx,
+      }}
+      {...rest}
+    >
+      <LiSPIcon />
+      <Typography variant="h6">Lost in St. Pete</Typography>
+    </Box>
+  );
+};
 export function MainLayout({ children }: MainLayoutProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -38,9 +61,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         <IconButton>
           <ChevronLeftIcon sx={{ color: "text.primary" }} />
         </IconButton>
-        <Typography variant="h6" sx={{ my: 2 }}>
-          Lost in St. Pete
-        </Typography>
+        <TitleLink />
       </Box>
       <Divider />
       <List>
@@ -51,7 +72,9 @@ export function MainLayout({ children }: MainLayoutProps) {
               component={Link}
               to={item.to}
             >
-              <ListItemText primary={item.name} />
+              <ListItemText
+                primary={<Typography variant="h6">{item.name}</Typography>}
+              />
             </ListItemButton>
           </ListItem>
         ))}
@@ -72,13 +95,8 @@ export function MainLayout({ children }: MainLayoutProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            Lost in St. Pete
-          </Typography>
+          <TitleLink sx={{ flexGrow: 1 }} />
+
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button
@@ -87,7 +105,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                 key={item.name}
                 sx={{ color: "#fff" }}
               >
-                {item.name}
+                <Typography variant="h6">{item.name}</Typography>
               </Button>
             ))}
           </Box>
@@ -101,13 +119,9 @@ export function MainLayout({ children }: MainLayoutProps) {
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
-          PaperProps={{
-            sx: {
-              zIndex: 999,
-            },
-          }}
           sx={{
             display: { xs: "block", sm: "none" },
+            zIndex: 5000,
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,

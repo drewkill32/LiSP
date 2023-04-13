@@ -22,7 +22,7 @@ function App() {
             paddingTop: 2,
             paddingBottom: 2,
             position: "sticky",
-            top: 65,
+            top: 55,
             zIndex: 999,
             backgroundColor: "background.default",
           }}

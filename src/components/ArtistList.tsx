@@ -78,7 +78,7 @@ export const ArtistList = () => {
               }}
             >
               <Divider variant="middle">
-                <Chip label={key} />
+                <Chip label={key} sx={{ letterSpacing: 1 }} />
               </Divider>
             </Box>
             {lineups.map((value, index) => {
