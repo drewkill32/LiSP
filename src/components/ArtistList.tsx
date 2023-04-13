@@ -70,7 +70,7 @@ export const ArtistList = () => {
             <Box
               sx={{
                 position: "sticky",
-                top: "125px",
+                top: 194,
                 paddingBlock: 2,
                 zIndex: 888,
                 backgroundColor: "background.default",
@@ -78,7 +78,7 @@ export const ArtistList = () => {
               }}
             >
               <Divider variant="middle">
-                <Chip label={key} />
+                <Chip label={key} sx={{ letterSpacing: 1 }} />
               </Divider>
             </Box>
             {lineups.map((value, index) => {

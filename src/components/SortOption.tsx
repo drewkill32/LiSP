@@ -1,5 +1,5 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Box, Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -36,7 +36,7 @@ export const SortOption = () => {
         disableElevation
         disabled={Boolean(search)}
         onClick={handleClick}
-        sx={{ width: "180px", minWidth: "180px", paddingBlock: "11px" }}
+        sx={{ width: "190px", minWidth: "180px", paddingBlock: "11px" }}
         endIcon={<KeyboardArrowDownIcon />}
       >
         <Stack
@@ -45,7 +45,9 @@ export const SortOption = () => {
           justifyContent="space-between"
         >
           <div>Sort By:</div>
-          <Box sx={{ pl: 1, fontWeight: "bold" }}>{sortOrder}</Box>
+          <Typography sx={{ pl: 1, letterSpacing: 3 }} fontWeight="bold">
+            {sortOrder}
+          </Typography>
         </Stack>
       </Button>
       <Menu

@@ -1,6 +1,6 @@
 import { createHashRouter } from "react-router-dom";
 import App from "../pages/App";
-import { Map } from "../pages/Map";
+import { GoogleMapPage } from "../pages/GoogleMapPage";
 
 export const createRoutes = () =>
   createHashRouter([
@@ -10,11 +10,11 @@ export const createRoutes = () =>
     },
     {
       path: "/map",
-      element: <Map />,
+      element: <GoogleMapPage />,
       children: [
         {
           path: ":mapId",
-          element: <Map />,
+          element: <GoogleMapPage />,
         },
       ],
     },
