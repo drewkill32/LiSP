@@ -59,6 +59,7 @@ const theme = createTheme({
           src: local('dcc-ash'), local('DCC - Ash'), url(fonts/dcc-ash.woff) format('woff');
           font-style: normal;
           font-weight: normal;
+          font-display: swap;
         }
         
         @font-face {
@@ -66,6 +67,7 @@ const theme = createTheme({
           src: url('fonts/gesso.woff') format('woff');
           font-weight: normal;
           font-style: normal;
+          font-display: swap;
         }
 
         @font-face {
@@ -73,6 +75,7 @@ const theme = createTheme({
           src: url('fonts/white-on-black.woff') format('woff');
           font-weight: normal;
           font-style: normal;
+          font-display: swap;
         }
 
         @font-face {
@@ -80,6 +83,7 @@ const theme = createTheme({
           src: url('fonts/destroy.woff') format('woff');
           font-weight: normal;
           font-style: normal;
+          font-display: swap;
         }
       `,
     },
