@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import { formatTime } from "../utils";
+import { TicketIcon } from "./TicketIcon";
 
 interface ArtistListItemTextProps
   extends Omit<
@@ -18,6 +19,7 @@ interface ArtistListItemTextProps
     venue: string;
     startTime: Date;
     endTime: Date;
+    ticketUrl?: string;
   };
   hideVenue?: boolean;
 }
@@ -43,6 +45,20 @@ export const ArtistListItemText = ({
               )}`}
             </Box>
           </Stack>
+          {lineup.ticketUrl && (
+            <Stack
+              sx={{ marginTop: 1 }}
+              component="a"
+              target="_blank"
+              href={lineup.ticketUrl}
+              direction="row"
+              gap={1}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <TicketIcon />
+              <Typography>Buy Tickets</Typography>
+            </Stack>
+          )}
         </>
       }
     />

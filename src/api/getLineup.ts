@@ -19,6 +19,7 @@ const lineupSchema = z.object({
   venueSlug: z.string(),
   lat: z.number(),
   lng: z.number(),
+  ticketUrl: z.string().url().optional(),
 });
 
 export type Day = z.infer<typeof daySchema>;
@@ -44,6 +45,7 @@ const lineupMapper: Mapper<Lineup> = (row) => {
     }),
     lat: parseFloat(row[10]),
     lng: parseFloat(row[11]),
+    ticketUrl: row[12],
   });
 };
 
