@@ -26,6 +26,7 @@ type MapDrawerProps = {
   open?: boolean;
   onClose?: () => void;
   venue: Venue;
+  centerMap?: (vertical: boolean) => void;
 };
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -65,6 +66,7 @@ const ResponsiveDrawer = ({
   children,
   open: enabled,
   title,
+  centerMap,
   onClose,
 }: ResponsiveDrawerProps) => {
   const isSmallScreen = useMediaQuery((theme: Theme) =>
@@ -77,6 +79,12 @@ const ResponsiveDrawer = ({
   useEffect(() => {
     setOpen(Boolean(enabled));
   }, [enabled]);
+
+  useEffect(() => {
+    if (open && enabled && typeof centerMap === "function") {
+      centerMap(isSmallScreen);
+    }
+  }, [open, enabled, isSmallScreen]);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -179,10 +187,10 @@ const ResponsiveDrawer = ({
   );
 };
 
-export const MapDrawer = ({ open, onClose, venue }: MapDrawerProps) => {
+export const MapDrawer = ({ venue, ...rest }: MapDrawerProps) => {
   //variant="persistent" anchor="left" sx={{ width: 350 }}
   return (
-    <ResponsiveDrawer open={open} onClose={onClose} title={venue?.name || ""}>
+    <ResponsiveDrawer {...rest} title={venue?.name || ""}>
       {venue && (
         <List sx={{ mt: 2, mx: 1, maxWidth: { sm: "100%", md: 360 } }}>
           <ListItem>
