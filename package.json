@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "parse": "nodemon scripts/parseLineup.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -29,6 +30,9 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "node-html-parser": "^6.1.5",
+    "nodemon": "^2.0.22",
     "typescript": "^4.9.3",
     "vite": "^4.2.0"
   }
