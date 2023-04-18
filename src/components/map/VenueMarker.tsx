@@ -15,7 +15,7 @@ export const VenueMarker = ({
   return (
     <Marker
       icon={{
-        url: enabled ? "map-pin-selected.svg" : "map-pin.svg",
+        url: enabled ? "/map-pin-selected.svg" : "/map-pin.svg",
       }}
       onClick={onClick}
       position={{ lat: position.lat, lng: position.lng }}

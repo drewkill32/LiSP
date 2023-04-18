@@ -9,6 +9,7 @@ interface ImportMetaEnv {
   readonly VITE_SETTINGS_RANGE: string;
   readonly VITE_EVENT_START_DATE: string;
   readonly VITE_GOOGLE_MAP_ID: string;
+  readonly VITE_GOOGLE_ANALYTICS_ID: string;
 }
 
 interface ImportMeta {
