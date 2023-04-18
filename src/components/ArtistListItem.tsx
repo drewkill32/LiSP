@@ -36,18 +36,21 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
           gap={0.5}
           justifyContent="flex-end"
         >
-          <IconButton
-            component="a"
-            href={lineup.artistBioUrl}
-            rel="noopener"
-            aria-label="artist bio"
-          >
-            {lineup.artistType === "Music" ? (
-              <HeadphonesIcon />
-            ) : (
-              <TheaterComedyIcon />
-            )}
-          </IconButton>
+          {lineup.artistBioUrl && (
+            <IconButton
+              component="a"
+              href={lineup.artistBioUrl}
+              rel="noopener"
+              aria-label="artist bio"
+            >
+              {lineup.artistType === "Music" ? (
+                <HeadphonesIcon />
+              ) : (
+                <TheaterComedyIcon />
+              )}
+            </IconButton>
+          )}
+
           <IconButton
             component={Link}
             to={`/map/${lineup.venueSlug}`}

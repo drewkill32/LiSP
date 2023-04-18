@@ -13,7 +13,7 @@ const lineupSchema = z.object({
   endTime: z.date(),
   venue: z.string(),
   details: z.string().optional(),
-  artistBioUrl: z.string().url(),
+  artistBioUrl: z.union([z.string().optional(), z.string().trim().url()]),
   artistType: z.string(),
   venueAddress: z.string(),
   venueSlug: z.string(),
