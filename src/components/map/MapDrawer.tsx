@@ -233,7 +233,7 @@ export const MapDrawer = ({ venue, ...rest }: MapDrawerProps) => {
                         fontWeight: "medium",
                       }}
                     >
-                      {`${s.name} Stage`}
+                      {`${s.name}`}
                     </ListItemText>
                   </ListItem>
                   <Divider />
