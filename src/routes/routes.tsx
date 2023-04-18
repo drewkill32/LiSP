@@ -1,9 +1,9 @@
-import { createHashRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import App from "../pages/App";
 import { GoogleMapPage } from "../pages/GoogleMapPage";
 
 export const createRoutes = () =>
-  createHashRouter([
+  createBrowserRouter([
     {
       path: "/",
       element: <App />,
