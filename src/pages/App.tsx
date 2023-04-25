@@ -69,6 +69,7 @@ function App() {
             justifyContent: "center",
             flexWrap: "wrap",
             alignItems: "center",
+            gap: 2,
           }}
         >
           {imgData.map((item) => (
