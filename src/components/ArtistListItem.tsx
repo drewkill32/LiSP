@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Lineup } from "../api";
+import { useAnalyticsEventTracker } from "../hooks/useEventTracker";
 import { useStarColor } from "../hooks/useStarColor";
 import { useLineup } from "../lineup";
 import { ArtistListItemText } from "./ArtistListItemText";
@@ -26,6 +27,7 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
   const labelId = `${lineup.name}-${lineup.id}`;
 
   const color = useStarColor();
+  const tracker = useAnalyticsEventTracker("artist");
 
   return (
     <ListItem
@@ -66,6 +68,7 @@ export function ArtistListItem({ lineup }: ArtistListItemParams) {
         role={undefined}
         onClick={() => {
           toggleStar(lineup.id);
+          tracker("favorite", lineup.name);
         }}
         dense
       >

@@ -56,7 +56,7 @@ const theme = createTheme({
       styleOverrides: `
         @font-face {
           font-family: 'dcc-ash';
-          src: local('dcc-ash'), local('DCC - Ash'), url(fonts/dcc-ash.woff) format('woff');
+          src: local('dcc-ash'), local('DCC - Ash'), url(/fonts/dcc-ash.woff) format('woff');
           font-style: normal;
           font-weight: normal;
           font-display: swap;
@@ -64,7 +64,7 @@ const theme = createTheme({
         
         @font-face {
           font-family: 'gesso';
-          src: url('fonts/gesso.woff') format('woff');
+          src: url('/fonts/gesso.woff') format('woff');
           font-weight: normal;
           font-style: normal;
           font-display: swap;
@@ -72,7 +72,7 @@ const theme = createTheme({
 
         @font-face {
           font-family: 'white-on-black';
-          src: url('fonts/white-on-black.woff') format('woff');
+          src: url('/fonts/white-on-black.woff') format('woff');
           font-weight: normal;
           font-style: normal;
           font-display: swap;
@@ -80,7 +80,7 @@ const theme = createTheme({
 
         @font-face {
           font-family: 'destroy';
-          src: url('fonts/destroy.woff') format('woff');
+          src: url('/fonts/destroy.woff') format('woff');
           font-weight: normal;
           font-style: normal;
           font-display: swap;
