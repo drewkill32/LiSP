@@ -18,10 +18,8 @@ export const FilterDays = () => {
       }}
       aria-label="text alignment"
     >
-      <ToggleButton value="Thu">Thu</ToggleButton>
       <ToggleButton value="Fri">Fri</ToggleButton>
       <ToggleButton value="Sat">Sat</ToggleButton>
-      <ToggleButton value="Sun">Sun</ToggleButton>
     </ToggleButtonGroup>
   );
 };
