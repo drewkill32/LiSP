@@ -57,14 +57,27 @@ function App() {
         <Box
           sx={{
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "center",
             margin: 0,
             padding: 0,
             backgroundColor: "#e5e5e5",
             borderRadius: "10px",
+            gap: "10px",
           }}
         >
+          <img
+            src="/imgs/sponsors/lisp-presented-by.png"
+            alt="Lost in St. Pete Presented By"
+            loading="lazy"
+            style={{
+              width: "100%",
+              minHeight: "200px",
+              maxHeight: "500px",
+              objectFit: "contain",
+            }}
+          />
           <img
             src="/imgs/sponsors/sponsers-2025.png"
             alt="Lost in St. Pete Sponsors"
